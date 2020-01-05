@@ -1,0 +1,10 @@
+.idea
+venv/
+__pycache__
+secret_vars.py
+db.sqlite3
+.coverage
+.mypy_cache
+coverage_html_report
+settings.json
+.vscode/

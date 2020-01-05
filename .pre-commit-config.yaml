@@ -1,0 +1,36 @@
+repos:
+
+# Fix styling issues
+-   repo: local
+    hooks:
+    -   id: isort
+        name: run isort
+        entry: isort
+        language: system
+        files: .py$
+
+-   repo: local
+    hooks:
+    -   id: black
+        name: run black
+        entry: black -l 79
+        language: system
+        files: .py$
+
+# Check if any styling issues remain
+-   repo: local
+    hooks:
+    -   id: flake8
+        name: run flake8
+        entry: flake8 --max-complexity 10
+        language: system
+        files: .py$
+
+# Security and code integrity checks
+-   repo: local
+    hooks:
+    -   id: bandit
+        name: bandit vulnerability-check
+        entry: bandit -r -s B311 -x */venv/*
+        language: system
+        files: .py$
