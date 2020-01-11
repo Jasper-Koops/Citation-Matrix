@@ -1,0 +1,20 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+source = .
+
+[report]
+
+omit =
+    */venv/*
+    build
+    *__init__.py
+    */tests/*
+    */migrations/*
+    manage.py
+    */wsgi.py
+    */apps.py
+    */asgi.py
+
+[html]
+directory = coverage_html_report
