@@ -88,3 +88,12 @@ class SourceFactory(factory.DjangoModelFactory):
             source_publisher=factory.SubFactory(PublisherFactory),
             source_journal=None,
         )
+
+
+class ReferenceFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = database_models.Reference
+
+    is_dummy_data = True
+    referrer = factory.SubFactory(SourceFactory)
+    reference = factory.SubFactory(SourceFactory)

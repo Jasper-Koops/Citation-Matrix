@@ -43,3 +43,10 @@ class SourceAdmin(admin.ModelAdmin):
     ]
     search_fields = ["title"]
     raw_id_fields = ["authors", "source_publisher", "source_journal"]
+
+
+@admin.register(database_models.Reference)
+class ReferenceAdmin(admin.ModelAdmin):
+    list_display = ["referrer", "reference"]
+    search_fields = ["referrer__title", "reference__title"]
+    raw_id_fields = ["referrer", "reference"]

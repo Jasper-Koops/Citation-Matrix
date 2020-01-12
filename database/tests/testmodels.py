@@ -4,9 +4,10 @@ from database.factories import (
     AuthorFactory,
     JournalFactory,
     PublisherFactory,
+    ReferenceFactory,
     SourceFactory,
 )
-from database.models import Author, Journal, Publisher, Source
+from database.models import Author, Journal, Publisher, Reference, Source
 
 
 class TestAuthorModel(TestCase):
@@ -131,3 +132,20 @@ class TestSourceModel(TestCase):
             "(Should be done in the journal instead)",
         ):
             SourceFactory(article=True, source_publisher=PublisherFactory())
+
+
+class TestReferenceModel(TestCase):
+    def setUp(self) -> None:
+        self.reference: Reference = ReferenceFactory()
+
+    def test_init(self) -> None:
+        self.assertTrue(self.reference)
+        self.assertTrue(self.reference.is_dummy_data)
+
+    def test__str__(self) -> None:
+        self.assertEqual(
+            str(self.reference),
+            "{} - {}".format(
+                self.reference.referrer, self.reference.reference
+            ),
+        )

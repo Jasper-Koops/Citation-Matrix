@@ -3,8 +3,6 @@ from typing import Tuple
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-# FIXME - je kan nog niet linken lul
-
 
 class CMBaseModel(models.Model):
     is_dummy_data = models.BooleanField(
@@ -177,3 +175,21 @@ class Source(CMBaseModel):
                 )
 
         super(Source, self).save(*args, **kwargs)
+
+
+class Reference(CMBaseModel):
+    referrer = models.ForeignKey(
+        Source,
+        related_name="citations",
+        on_delete=models.CASCADE,
+        verbose_name=_("The source making the reference ('FROM')"),
+    )
+    reference = models.ForeignKey(
+        Source,
+        related_name="cited",
+        on_delete=models.CASCADE,
+        verbose_name=_("The source being referred to ('TO')"),
+    )
+
+    def __str__(self) -> str:
+        return "{} - {}".format(self.referrer, self.reference)
