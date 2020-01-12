@@ -6,9 +6,10 @@ from database.factories import (
     AuthorFactory,
     JournalFactory,
     PublisherFactory,
+    ReferenceFactory,
     SourceFactory,
 )
-from database.models import Author, Journal, Publisher, Source
+from database.models import Author, Journal, Publisher, Reference, Source
 
 
 class Command(BaseCommand):
@@ -116,6 +117,23 @@ class Command(BaseCommand):
             )
         )
 
+    def generate_references(self) -> None:
+        """ Generates 400 references """
+        for x in range(400):
+            randomized_sources: QuerySet[
+                Source
+            ] = Source.objects.all().order_by("?")
+            referrer: Source = randomized_sources.first()
+            reference: Source = randomized_sources.last()
+            reference_object: Reference = ReferenceFactory(
+                referrer=referrer, reference=reference
+            )
+            self.stdout.write(
+                self.style.SUCCESS("Created reference: {}").format(
+                    reference_object
+                )
+            )
+
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS("Generating dummy data!"))
         self.generate_publishers()
@@ -124,5 +142,6 @@ class Command(BaseCommand):
         self.generate_books()
         self.generate_articles_single_author()
         self.generate_articles_two_authors()
+        self.generate_references()
         self.generate_super_user()
         self.stdout.write(self.style.SUCCESS("Done"))
