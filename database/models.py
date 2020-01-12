@@ -3,6 +3,8 @@ from typing import Tuple
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+# FIXME - je kan nog niet linken lul
+
 
 class CMBaseModel(models.Model):
     is_dummy_data = models.BooleanField(
@@ -26,6 +28,11 @@ class Author(CMBaseModel):
     last_name = models.CharField(
         max_length=200, verbose_name=_("Last name of the author")
     )
+
+    def __str__(self) -> str:
+        return "{} {} {}".format(
+            self.first_name, self.middle_name, self.last_name
+        )
 
     @property
     def initials_of_first_and_middle_names(self):
@@ -53,6 +60,9 @@ class Publisher(CMBaseModel):
         verbose_name=_("City the publisher is located in"),
     )
 
+    def __str__(self) -> str:
+        return "{}".format(self.name)
+
 
 class Journal(CMBaseModel):
     name = models.CharField(
@@ -64,6 +74,9 @@ class Journal(CMBaseModel):
         verbose_name=_("Publisher of the journal"),
         on_delete=models.CASCADE,
     )
+
+    def __str__(self) -> str:
+        return "{}".format(self.name)
 
 
 class Source(CMBaseModel):
@@ -112,6 +125,9 @@ class Source(CMBaseModel):
         null=True,
         verbose_name=_("Index of the journal page where the article ends."),
     )
+
+    def __str__(self) -> str:
+        return "{} ({})".format(self.title, self.type)
 
     @property
     def get_publisher(self):

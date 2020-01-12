@@ -17,6 +17,16 @@ class TestAuthorModel(TestCase):
         self.assertTrue(self.author)
         self.assertTrue(self.author.is_dummy_data)
 
+    def test__str__(self) -> None:
+        self.assertEqual(
+            str(self.author),
+            "{} {} {}".format(
+                self.author.first_name,
+                self.author.middle_name,
+                self.author.last_name,
+            ),
+        )
+
     def test_initials_of_first_and_middle_names_property(self) -> None:
         author: Author = AuthorFactory(
             first_name="Jan Peter", middle_name="Fred Arnold"
@@ -32,6 +42,11 @@ class TestPublisherModel(TestCase):
         self.assertTrue(self.publisher)
         self.assertTrue(self.publisher.is_dummy_data)
 
+    def test__str__(self) -> None:
+        self.assertEqual(
+            str(self.publisher), "{}".format(self.publisher.name,),
+        )
+
 
 class TestJournalModel(TestCase):
     def setUp(self) -> None:
@@ -41,6 +56,11 @@ class TestJournalModel(TestCase):
         self.assertTrue(self.journal)
         self.assertTrue(self.journal.is_dummy_data)
 
+    def test__str__(self) -> None:
+        self.assertEqual(
+            str(self.journal), "{}".format(self.journal.name,),
+        )
+
 
 class TestSourceModel(TestCase):
     def setUp(self) -> None:
@@ -49,6 +69,12 @@ class TestSourceModel(TestCase):
     def test_init(self) -> None:
         self.assertTrue(self.source)
         self.assertTrue(self.source.is_dummy_data)
+
+    def test__str__(self) -> None:
+        self.assertEqual(
+            str(self.source),
+            "{} ({})".format(self.source.title, self.source.type),
+        )
 
     def test_book_trait(self) -> None:
         article: Source = SourceFactory(article=True)
