@@ -1,12 +1,23 @@
-from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.db.models import Count
 from django.test import TestCase
 
-from database.models import Author, Journal, Publisher, Reference, Source
+from database.models import (
+    Author,
+    Evaluation,
+    Journal,
+    Publisher,
+    Reference,
+    Source,
+    User,
+)
 
 
 class TestGenerateDummyDataCommand(TestCase):
+    def verify_normal_users(self) -> None:
+        """  Verify that the non-superuser users have been created as planned """
+        self.assertEqual(User.objects.filter(is_superuser=False).count(), 5)
+
     def verify_publishers(self) -> None:
         """ Verify that the publishers have been created as planned. """
         self.assertEqual(Publisher.objects.all().count(), 5)
@@ -61,9 +72,14 @@ class TestGenerateDummyDataCommand(TestCase):
             User.objects.filter(is_superuser=True, username="test").count(), 1
         )
 
+    def verify_evaluations(self) -> None:
+        """ Verify that the evaluations have been created. """
+        self.assertEqual(Evaluation.objects.all().count(), 48)
+
     def test_command(self) -> None:
         # Call command
         call_command("generate_dummy_data")
+        self.verify_normal_users()
         self.verify_publishers()
         self.verify_journals()
         self.verify_authors()
@@ -72,3 +88,4 @@ class TestGenerateDummyDataCommand(TestCase):
         self.verify_multiple_author_articles()
         self.verify_references()
         self.verify_superuser()
+        self.verify_evaluations()

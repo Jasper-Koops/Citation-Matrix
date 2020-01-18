@@ -1,19 +1,36 @@
-from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db.models import QuerySet
 
 from database.factories import (
     AuthorFactory,
+    EvaluationFactory,
     JournalFactory,
     PublisherFactory,
     ReferenceFactory,
     SourceFactory,
+    UserFactory,
 )
-from database.models import Author, Journal, Publisher, Reference, Source
+from database.models import (
+    Author,
+    Evaluation,
+    Journal,
+    Publisher,
+    Reference,
+    Source,
+    User,
+)
 
 
 class Command(BaseCommand):
     help = "Generates dummy data for the application database."
+
+    def generate_users(self) -> None:
+        """ Generates 5 users """
+        for x in range(5):
+            user: User = UserFactory()
+            self.stdout.write(
+                self.style.SUCCESS("Created user: {}").format(user)
+            )
 
     def generate_publishers(self) -> None:
         """ Generates 5 fake publishers """
@@ -134,8 +151,23 @@ class Command(BaseCommand):
                 )
             )
 
+    def generate_evaluations(self) -> None:
+        """ Generates 8 evaluations for random sources for each user """
+        for user in User.objects.all():
+            for x in range(8):
+                selected_source: Source = Source.objects.all().order_by(
+                    "?"
+                ).first()
+                evaluation: Evaluation = EvaluationFactory(
+                    user=user, source=selected_source
+                )
+                self.stdout.write(
+                    self.style.SUCCESS("Created {}").format(evaluation)
+                )
+
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS("Generating dummy data!"))
+        self.generate_users()
         self.generate_publishers()
         self.generate_journals()
         self.generate_authors()
@@ -144,4 +176,5 @@ class Command(BaseCommand):
         self.generate_articles_two_authors()
         self.generate_references()
         self.generate_super_user()
+        self.generate_evaluations()
         self.stdout.write(self.style.SUCCESS("Done"))

@@ -2,12 +2,43 @@ from django.test import TestCase
 
 from database.factories import (
     AuthorFactory,
+    EvaluationFactory,
     JournalFactory,
     PublisherFactory,
     ReferenceFactory,
     SourceFactory,
+    UserFactory,
 )
-from database.models import Author, Journal, Publisher, Reference, Source
+from database.models import (
+    Author,
+    Evaluation,
+    Journal,
+    Publisher,
+    Reference,
+    Source,
+    User,
+)
+
+
+class TestUserModel(TestCase):
+    def setUp(self) -> None:
+        self.user_1: User = UserFactory()
+
+    def test_init(self) -> None:
+        """ Verify that the model is able to initialize """
+        self.assertTrue(self.user_1)
+        self.assertTrue(self.user_1.date_joined < self.user_1.last_login)
+
+    def test_is_super_trait(self) -> None:
+        """
+        Verify that users are not super by default and that the 'is_super'
+        trait works as expected
+        """
+        self.assertFalse(self.user_1.is_staff)
+        self.assertFalse(self.user_1.is_superuser)
+        super_user: User = UserFactory(is_super=True)
+        self.assertTrue(super_user.is_staff)
+        self.assertTrue(super_user.is_superuser)
 
 
 class TestAuthorModel(TestCase):
@@ -147,5 +178,21 @@ class TestReferenceModel(TestCase):
             str(self.reference),
             "{} - {}".format(
                 self.reference.referrer, self.reference.reference
+            ),
+        )
+
+
+class TestEvaluationModel(TestCase):
+    def setUp(self) -> None:
+        self.evaluation: Evaluation = EvaluationFactory()
+
+    def test_init(self) -> None:
+        self.assertTrue(self.evaluation)
+
+    def test__str__(self) -> None:
+        self.assertEqual(
+            str(self.evaluation),
+            "Evaluation for {} from {}".format(
+                self.evaluation.source, self.evaluation.user
             ),
         )
