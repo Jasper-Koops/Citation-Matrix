@@ -113,7 +113,7 @@ class Source(CMBaseModel):
         verbose_name=_("Publisher of the source (if applicable)"),
     )
     year_of_publication = models.IntegerField(
-        verbose_name=_("Publisher of the source")
+        verbose_name=_("Year the source was published")
     )
     source_journal = models.ForeignKey(
         Journal,
