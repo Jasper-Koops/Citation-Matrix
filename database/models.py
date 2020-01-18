@@ -27,7 +27,10 @@ class Author(CMBaseModel):
         verbose_name=_("First name of the author"),
     )
     middle_name = models.CharField(
-        max_length=200, verbose_name=_("Middle name(s) of the author")
+        max_length=200,
+        verbose_name=_("Middle name(s) of the author"),
+        blank=True,
+        null=True,
     )
     last_name = models.CharField(
         max_length=200, verbose_name=_("Last name of the author")
