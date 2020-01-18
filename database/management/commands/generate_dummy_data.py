@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.core.management.base import BaseCommand
 from django.db.models import QuerySet
 
@@ -61,9 +63,10 @@ class Command(BaseCommand):
         """ Have each author write 2 books """
         for author in Author.objects.all():
             for x in range(2):
-                selected_publisher: Publisher = Publisher.objects.all().order_by(
-                    "?"
-                ).first()
+                selected_publisher: Optional[
+                    Publisher
+                ] = Publisher.objects.all().order_by("?").first()
+                assert selected_publisher
                 book: Source = SourceFactory(
                     book=True,
                     source_publisher=selected_publisher,
@@ -77,9 +80,10 @@ class Command(BaseCommand):
         """ Have each author write 3 articles """
         for author in Author.objects.all():
             for x in range(3):
-                selected_journal: Journal = Journal.objects.all().order_by(
-                    "?"
-                ).first()
+                selected_journal: Optional[
+                    Journal
+                ] = Journal.objects.all().order_by("?").first()
+                assert selected_journal
                 article: Source = SourceFactory(
                     article=True,
                     source_journal=selected_journal,
@@ -98,9 +102,10 @@ class Command(BaseCommand):
         queryset: QuerySet[Author] = Author.objects.all()
         author_iterator = iter(queryset)
         for author_1 in author_iterator:
-            selected_journal: Journal = Journal.objects.all().order_by(
-                "?"
-            ).first()
+            selected_journal: Optional[
+                Journal
+            ] = Journal.objects.all().order_by("?").first()
+            assert selected_journal
             article: Source = SourceFactory(
                 article=True,
                 source_journal=selected_journal,
@@ -140,8 +145,9 @@ class Command(BaseCommand):
             randomized_sources: QuerySet[
                 Source
             ] = Source.objects.all().order_by("?")
-            referrer: Source = randomized_sources.first()
-            reference: Source = randomized_sources.last()
+            referrer: Optional[Source] = randomized_sources.first()
+            reference: Optional[Source] = randomized_sources.last()
+            assert referrer, reference
             reference_object: Reference = ReferenceFactory(
                 referrer=referrer, reference=reference
             )
@@ -155,9 +161,10 @@ class Command(BaseCommand):
         """ Generates 8 evaluations for random sources for each user """
         for user in User.objects.all():
             for x in range(8):
-                selected_source: Source = Source.objects.all().order_by(
-                    "?"
-                ).first()
+                selected_source: Optional[
+                    Source
+                ] = Source.objects.all().order_by("?").first()
+                assert selected_source
                 evaluation: Evaluation = EvaluationFactory(
                     user=user, source=selected_source
                 )

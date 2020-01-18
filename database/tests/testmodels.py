@@ -27,6 +27,7 @@ class TestUserModel(TestCase):
     def test_init(self) -> None:
         """ Verify that the model is able to initialize """
         self.assertTrue(self.user_1)
+        assert self.user_1.last_login
         self.assertTrue(self.user_1.date_joined < self.user_1.last_login)
 
     def test_is_super_trait(self) -> None:
