@@ -31,6 +31,6 @@ repos:
     hooks:
     -   id: bandit
         name: bandit vulnerability-check
-        entry: bandit -r -s B311 -s B101 -x */venv/*
+        entry: bandit -r -s B311,B101 -x */venv/*
         language: system
         files: .py$

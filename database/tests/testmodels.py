@@ -189,6 +189,7 @@ class TestEvaluationModel(TestCase):
 
     def test_init(self) -> None:
         self.assertTrue(self.evaluation)
+        self.assertTrue(self.evaluation.is_dummy_data)
 
     def test__str__(self) -> None:
         self.assertEqual(

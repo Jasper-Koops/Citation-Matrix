@@ -127,6 +127,7 @@ class EvaluationFactory(factory.DjangoModelFactory):
     class Meta:
         model = database_models.Evaluation
 
+    is_dummy_data = True
     user = factory.SubFactory(UserFactory)
     source = factory.SubFactory(SourceFactory)
     date = factory.LazyFunction(timezone.now)

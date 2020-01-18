@@ -49,6 +49,7 @@ class SourceAdmin(admin.ModelAdmin):
 class ReferenceAdmin(admin.ModelAdmin):
     list_display = ["referrer", "reference"]
     search_fields = ["referrer__title", "reference__title"]
+    list_filter = ["is_dummy_data"]
     raw_id_fields = ["referrer", "reference"]
 
 
@@ -64,5 +65,5 @@ class EvaluationAdmin(admin.ModelAdmin):
         "source__author__first_name",
         "source__author__last_name",
     ]
-    list_filter = ["favorited"]
+    list_filter = ["is_dummy_data", "favorited"]
     raw_id_fields = ["source", "user"]
