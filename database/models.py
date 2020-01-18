@@ -1,7 +1,13 @@
 from typing import Tuple
 
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+
+class User(AbstractUser):
+    pass
 
 
 class CMBaseModel(models.Model):
@@ -123,6 +129,9 @@ class Source(CMBaseModel):
         null=True,
         verbose_name=_("Index of the journal page where the article ends."),
     )
+    abstract = models.TextField(
+        blank=True, null=True, verbose_name=_("The abstract of the source.")
+    )
 
     def __str__(self) -> str:
         return "{} ({})".format(self.title, self.type)
@@ -193,3 +202,31 @@ class Reference(CMBaseModel):
 
     def __str__(self) -> str:
         return "{} - {}".format(self.referrer, self.reference)
+
+
+class Evaluation(CMBaseModel):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name=_("User making the evaluation"),
+    )
+    source = models.ForeignKey(
+        Source,
+        on_delete=models.CASCADE,
+        verbose_name=_("The source being evaluated"),
+    )
+    date = models.DateField(
+        default=timezone.now, verbose_name=_("Date of the evaluation.")
+    )
+    comments = models.TextField(
+        blank=True, null=True, verbose_name=_("Comments made by the user")
+    )
+    favorited = models.BooleanField(
+        default=False,
+        verbose_name=_(
+            "A boolean indicating if the source has been favorited by the user."
+        ),
+    )
+
+    def __str__(self) -> str:
+        return "Evaluation for {} from {}".format(self.source, self.user)

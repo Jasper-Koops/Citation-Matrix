@@ -1,7 +1,9 @@
 import random
+from datetime import timedelta
 from typing import Optional
 
 import factory
+from django.utils import timezone
 from faker import Faker
 
 from database import models as database_models
@@ -56,6 +58,7 @@ class SourceFactory(factory.DjangoModelFactory):
     )
     type = "AR"
     source_journal = factory.SubFactory(JournalFactory)
+    abstract = factory.Faker("text")
 
     @factory.lazy_attribute
     def journal_page_range_start(self) -> int:
@@ -97,3 +100,35 @@ class ReferenceFactory(factory.DjangoModelFactory):
     is_dummy_data = True
     referrer = factory.SubFactory(SourceFactory)
     reference = factory.SubFactory(SourceFactory)
+
+
+class UserFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = "database.User"
+
+    username = factory.Sequence(lambda n: "user_%d" % n)
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("first_name")
+    email = factory.Faker("email")
+    is_active = True
+    is_staff = False
+    is_superuser = False
+    last_login = factory.LazyFunction(timezone.now)
+
+    @factory.lazy_attribute
+    def date_joined(self):
+        return timezone.now() - timedelta(days=random.randint(10, 20))
+
+    class Params:
+        is_super = factory.Trait(is_staff=True, is_superuser=True)
+
+
+class EvaluationFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = database_models.Evaluation
+
+    user = factory.SubFactory(UserFactory)
+    source = factory.SubFactory(SourceFactory)
+    date = factory.LazyFunction(timezone.now)
+    comments = factory.Faker("text")
+    favorited = False

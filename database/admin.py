@@ -50,3 +50,18 @@ class ReferenceAdmin(admin.ModelAdmin):
     list_display = ["referrer", "reference"]
     search_fields = ["referrer__title", "reference__title"]
     raw_id_fields = ["referrer", "reference"]
+
+
+@admin.register(database_models.Evaluation)
+class EvaluationAdmin(admin.ModelAdmin):
+    list_display = ["source", "user", "date", "favorited"]
+    search_fields = [
+        "user__first_name",
+        "user__last_name",
+        "user__username",
+        "user__email",
+        "source__title",
+        "source__author__first_name",
+        "source__author__last_name",
+    ]
+    list_filter = ["favorited"]
