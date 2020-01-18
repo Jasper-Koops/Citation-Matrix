@@ -65,3 +65,4 @@ class EvaluationAdmin(admin.ModelAdmin):
         "source__author__last_name",
     ]
     list_filter = ["favorited"]
+    raw_id_fields = ["source", "user"]
