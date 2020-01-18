@@ -1,6 +1,22 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from database import models as database_models
+
+
+@admin.register(database_models.User)
+class CustomUserAdmin(UserAdmin):
+    list_display = [
+        "username",
+        "first_name",
+        "last_name",
+        "email",
+        "is_staff",
+        "is_superuser",
+        "last_login",
+    ]
+    search_fields = ["username", "first_name", "last_name", "email"]
+    list_filter = ["is_staff", "is_superuser", "is_active"]
 
 
 @admin.register(database_models.Author)
