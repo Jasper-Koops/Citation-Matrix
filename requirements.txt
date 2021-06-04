@@ -7,7 +7,7 @@ black==19.10b0
 cfgv==2.0.1
 Click==7.0
 coverage==5.0.1
-Django==2.2.9
+Django==2.2.21
 django-stubs==1.4.0
 entrypoints==0.3
 factory-boy==2.12.0
